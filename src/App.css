@@ -1,0 +1,26 @@
+#root{
+    height: 100vh;  
+    /* background-color: #005092; */
+
+}
+.main{
+    /* background-color: #082c47; */
+    margin-top: 200px;
+    box-shadow: 5px 10px 18px #8888;
+}
+ .heading{
+    padding:10px 0px ;
+} 
+
+.content{
+    padding-bottom: 20px;
+}
+
+.error{
+    color:red
+}
+
+.footer{
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
