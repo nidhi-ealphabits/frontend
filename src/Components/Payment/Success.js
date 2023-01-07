@@ -11,13 +11,14 @@ function Success() {
 
   const data = bestvalue_obj_id || fastest_obj_id || cheapest_obj_id;
 
+  const[flag,setFlag]=useState(false)
+  const[label_url,setLabel_Url]=useState()
+
   if (data === cheapest_obj_id) {
     var dataValue = cheapest_obj_id;
   } else if (data === bestvalue_obj_id) {
-    console.log("in best value");
     dataValue = bestvalue_obj_id;
   } else {
-    console.log("in fastest");
     dataValue = fastest_obj_id;
   }
 
@@ -39,7 +40,9 @@ function Success() {
       .then((response) => response.json())
       .then((data) => {
         if (data !== undefined || data !== null || data !== "") {
-          navigate("/label", { state: { data } });
+          const url=data
+          setLabel_Url(url)
+          setFlag(true)
         }
       });
   };
@@ -50,7 +53,7 @@ function Success() {
 
   return (
     <Row>
-      <Col md={{ span: 8, offset: 2 }} className="main">
+      <Col md={{ span: 8, offset: 2 }} className="main mt-2">
         <Container className="content mt-3" style={{ textAlign: "center" }}>
           <h2>Your Payment Has Been Successfully Received</h2>
           <h4>Thank You for Shopping With Us!</h4>
@@ -67,6 +70,7 @@ function Success() {
               Get Label
             </Button>
           </ButtonToolbar>
+          {flag && <img src={label_url} height="470"></img>}
         </Container>
       </Col>
     </Row>

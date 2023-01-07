@@ -149,7 +149,6 @@ useEffect(() => {
       .then((response) => response.json())
       .then((data) => {
         if (data !== undefined || data !== null || data !== "") {
-          // console.log("i m here in resp",data);
           navigate("/modal", { state: { data } });
           setLoading(false);
         }

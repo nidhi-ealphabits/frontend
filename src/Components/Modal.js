@@ -30,8 +30,6 @@ function Modal() {
       filters1.every((val) => item.attributes.indexOf(val) > -1)
     );
 
-    console.log(filteredResults1,"bestvalue filtered result")
-
     setEstDayBest(filteredResults1[0].duration_terms);
 
     setbestvalueAmount((filteredResults1[0].amount * 1.35 + 1).toFixed(2));
@@ -48,8 +46,7 @@ function Modal() {
     const filteredResults2 = data.filter((item) =>
       filters2.every((val) => item.attributes.indexOf(val) > -1)
     );
-    console.log(filteredResults2,"cheapest filtered result")
-
+  
     localStorage.setItem("cheapest_obj_id",filteredResults2[0].object_id)
 
     setEstDayCheap(filteredResults2[0].duration_terms);
@@ -66,9 +63,6 @@ function Modal() {
     const filteredResults3 = data.filter((item) =>
       filters3.every((val) => item.attributes.indexOf(val) > -1)
     );
-
-    console.log(filteredResults3,"fastest filtered result")
-
 
     localStorage.setItem("fastest_obj_id",filteredResults3[0].object_id)
 
