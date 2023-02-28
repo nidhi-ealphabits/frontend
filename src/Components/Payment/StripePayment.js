@@ -11,9 +11,9 @@ function StripePayment() {
 
   const location = useLocation();
 
-  const bestvalue = localStorage.getItem("bestvalue");
-  const cheapest = localStorage.getItem("cheapest");
-  const fastest = localStorage.getItem("fastest");
+  // const bestvalue = localStorage.getItem("bestvalue");
+  // const cheapest = localStorage.getItem("cheapest");
+  // const fastest = localStorage.getItem("fastest");
   const navigate = useNavigate();
 
   const data =

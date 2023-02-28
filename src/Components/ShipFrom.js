@@ -9,28 +9,19 @@ import {
   ButtonToolbar,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { usePlacesWidget } from "react-google-autocomplete";
 
 function ShipFrom() {
   //Navigation variable
   const navigate = useNavigate();
 
   //ship from variable
-  const [ship_from_name, setShip_From_Name] = useState("");
-  const [ship_from_address, setShip_From_Address] = useState("");
-  const [ship_from_city, setShip_From_City] = useState("");
-  const [ship_from_state, setShip_From_State] = useState("");
-  const [ship_from_zipcode, setShip_From_Zipcode] = useState("");
+  const [ship_from_name, setShip_From_Name] = useState();
+  const [ship_from_address, setShip_From_Address] = useState();
+  const [ship_from_city, setShip_From_City] = useState();
+  const [ship_from_state, setShip_From_State] = useState();
+  const [ship_from_zipcode, setShip_From_Zipcode] = useState();
   const [ship_from_country, setShip_From_Country] = useState("US");
-
-  //getting previousData
-  const previous_data = JSON.parse(localStorage.getItem("ship_from"));
-
-  //error variable
-  const[error,setError]=useState("")
-
-   //Regex
-   const isNonWhiteSpace = /^\S*$/;
-  const isWhiteSpace=/^[^\s]+(\s+[^\s]+)*$/
 
   //ship from object for geting rates
   const ship_from = {
@@ -41,6 +32,33 @@ function ShipFrom() {
     zip: ship_from_zipcode,
     country: ship_from_country,
   };
+
+    //for autoComplete
+    const {ref} = usePlacesWidget({
+      apiKey: "AIzaSyBht8VXDhG7fl4JFB5RiTMMFHbUJOMZIlw",
+      onPlaceSelected: (place) => {
+        console.log(place);
+        setShip_From_Address(place.address_components[0].long_name+" "+place.address_components[1].long_name)
+        setShip_From_City(place.address_components[3].long_name)
+        setShip_From_State(place.address_components[5].short_name)
+        setShip_From_Zipcode(place.address_components[7].long_name)
+      },
+      options: {
+        fields: ["address_components", "geometry"],
+        types: ["address"],
+        componentRestrictions: { country: "us" },
+      },
+    });
+
+      //getting previousData
+  const previous_data = JSON.parse(localStorage.getItem("ship_from"));
+
+  //error variable
+  const[error,setError]=useState("")
+
+   //Regex
+   const isNonWhiteSpace = /^\S*$/;
+  const isWhiteSpace=/^[^\s]+(\s+[^\s]+)*$/
 
   useEffect(() => {
     setTimeout(() => {
@@ -80,8 +98,8 @@ function ShipFrom() {
       }, 3000);
       return;
     } else if (
-      ship_from_name == "" ||
-      ship_from_name == undefined ||
+      ship_from_name === "" ||
+      ship_from_name === undefined ||
       !isWhiteSpace.test(ship_from_name)
     ) {
       isWhiteSpace.test(ship_from_name)
@@ -92,8 +110,8 @@ function ShipFrom() {
       }, 3000);
       return;
     } else if (
-      ship_from_address == "" ||
-      ship_from_address == undefined ||
+      ship_from_address === "" ||
+      ship_from_address === undefined ||
       !isWhiteSpace.test(ship_from_address)
     ) {
       isWhiteSpace.test(ship_from_address)
@@ -104,8 +122,8 @@ function ShipFrom() {
       }, 3000);
       return;
     } else if (
-      ship_from_city == "" ||
-      ship_from_city == undefined ||
+      ship_from_city === "" ||
+      ship_from_city === undefined ||
       !isWhiteSpace.test(ship_from_city)
     ) {
       isWhiteSpace.test(ship_from_city)
@@ -116,8 +134,8 @@ function ShipFrom() {
       }, 3000);
       return;
     } else if (
-      ship_from_state == "" ||
-      ship_from_state == undefined ||
+      ship_from_state === "" ||
+      ship_from_state === undefined ||
       !isWhiteSpace.test(ship_from_state)
     ) {
       isWhiteSpace.test(ship_from_state)
@@ -128,8 +146,8 @@ function ShipFrom() {
       }, 3000);
       return;
     } else if (
-      ship_from_zipcode == "" ||
-      ship_from_zipcode == undefined ||
+      ship_from_zipcode === "" ||
+      ship_from_zipcode === undefined ||
       !isNonWhiteSpace.test(ship_from_zipcode)
     ) {
       isNonWhiteSpace.test(ship_from_zipcode)
@@ -167,11 +185,6 @@ function ShipFrom() {
                     setShip_From_Name(e.target.value);
                   }}
                 />
-                {/* {nameErr && (
-                <div className="error" style={{ color: "red" }}>
-                  {nameErr}
-                </div>
-              )} */}
               </FloatingLabel>
               <FloatingLabel
                 controlId="floatingInput"
@@ -182,10 +195,8 @@ function ShipFrom() {
                   type="text"
                   placeholder="Address"
                   autoComplete="off"
+                  ref={ref}
                   value={ship_from_address}
-                  onChange={(e) => {
-                    setShip_From_Address(e.target.value);
-                  }}
                 />
               </FloatingLabel>
             </Row>
@@ -200,11 +211,7 @@ function ShipFrom() {
                   type="text"
                   placeholder="city"
                   autoComplete="off"
-                  name="ship_from_city"
                   value={ship_from_city}
-                  onChange={(e) => {
-                    setShip_From_City(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -216,11 +223,7 @@ function ShipFrom() {
                   type="text"
                   placeholder="state"
                   autoComplete="off"
-                  name="ship_from_state"
                   value={ship_from_state}
-                  onChange={(e) => {
-                    setShip_From_State(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -232,11 +235,7 @@ function ShipFrom() {
                   type="text"
                   placeholder="zipcode"
                   autoComplete="off"
-                  name="ship_from_zipcode"
                   value={ship_from_zipcode}
-                  onChange={(e) => {
-                    setShip_From_Zipcode(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel

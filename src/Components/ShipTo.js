@@ -9,17 +9,18 @@ import {
   Button,
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { usePlacesWidget } from "react-google-autocomplete";
 
 function ShipTo() {
   //Navigation
   const navigate = useNavigate();
 
   //ship to variable
-  const [ship_to_name, setShip_To_Name] = useState("");
-  const [ship_to_address, setShip_To_Address] = useState("");
-  const [ship_to_city, setShip_To_City] = useState("");
-  const [ship_to_state, setShip_To_State] = useState("");
-  const [ship_to_zipcode, setShip_To_Zipcode] = useState("");
+  const [ship_to_name, setShip_To_Name] = useState();
+  const [ship_to_address, setShip_To_Address] = useState();
+  const [ship_to_city, setShip_To_City] = useState();
+  const [ship_to_state, setShip_To_State] = useState();
+  const [ship_to_zipcode, setShip_To_Zipcode] = useState();
   const [ship_to_country, setShip_To_Country] = useState("US");
 
   //ship to object for geting rates
@@ -31,6 +32,22 @@ function ShipTo() {
     zip: ship_to_zipcode,
     country: ship_to_country,
   };
+//for autoComplete
+  const { ref } = usePlacesWidget({
+    apiKey: "AIzaSyBht8VXDhG7fl4JFB5RiTMMFHbUJOMZIlw",
+    onPlaceSelected: (place) => {
+      setShip_To_Address(place.address_components[0].long_name+" "+place.address_components[1].long_name)
+      setShip_To_City(place.address_components[3].long_name)
+      setShip_To_State(place.address_components[5].short_name)
+      setShip_To_Zipcode(place.address_components[7].long_name)
+      console.log(place);
+    },
+    options: {
+      fields: ["address_components", "geometry"],
+      types: ["address"],
+      componentRestrictions: { country: "us" },
+    },
+  });
 
   //object for previous data
   const previous_data = JSON.parse(localStorage.getItem("ship_to"));
@@ -73,8 +90,8 @@ function ShipTo() {
       }, 3000);
       return;
     } else if (
-      ship_to_name == "" ||
-      ship_to_name == undefined ||
+      ship_to_name === "" ||
+      ship_to_name === undefined ||
       !isWhiteSpace.test(ship_to_name)
     ) {
       isWhiteSpace.test(ship_to_name)
@@ -85,8 +102,8 @@ function ShipTo() {
       }, 3000);
       return;
     } else if (
-      ship_to_address == "" ||
-      ship_to_address == undefined ||
+      ship_to_address === "" ||
+      ship_to_address === undefined ||
       !isWhiteSpace.test(ship_to_address)
     ) {
       isWhiteSpace.test(ship_to_address)
@@ -97,8 +114,8 @@ function ShipTo() {
       }, 3000);
       return;
     } else if (
-      ship_to_city == "" ||
-      ship_to_city == undefined ||
+      ship_to_city === "" ||
+      ship_to_city === undefined ||
       !isWhiteSpace.test(ship_to_city)
     ) {
       isWhiteSpace.test(ship_to_city)
@@ -109,8 +126,8 @@ function ShipTo() {
       }, 3000);
       return;
     } else if (
-      ship_to_state == "" ||
-      ship_to_state == undefined ||
+      ship_to_state === "" ||
+      ship_to_state === undefined ||
       !isWhiteSpace.test(ship_to_state)
     ) {
       isWhiteSpace.test(ship_to_state)
@@ -121,8 +138,8 @@ function ShipTo() {
       }, 3000);
       return;
     } else if (
-      ship_to_zipcode == "" ||
-      ship_to_zipcode == undefined ||
+      ship_to_zipcode === "" ||
+      ship_to_zipcode === undefined ||
       !isNonWhiteSpace.test(ship_to_zipcode)
     ) {
       isNonWhiteSpace.test(ship_to_zipcode)
@@ -170,10 +187,8 @@ function ShipTo() {
                   type="text"
                   placeholder="Address"
                   autoComplete="off"
+                  ref={ref}
                   value={ship_to_address}
-                  onChange={(e) => {
-                    setShip_To_Address(e.target.value);
-                  }}
                 />
               </FloatingLabel>
             </Row>
@@ -189,9 +204,6 @@ function ShipTo() {
                   placeholder="city"
                   autoComplete="off"
                   value={ship_to_city}
-                  onChange={(e) => {
-                    setShip_To_City(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -204,9 +216,6 @@ function ShipTo() {
                   placeholder="state"
                   autoComplete="off"
                   value={ship_to_state}
-                  onChange={(e) => {
-                    setShip_To_State(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -219,9 +228,6 @@ function ShipTo() {
                   placeholder="zipcode"
                   autoComplete="off"
                   value={ship_to_zipcode}
-                  onChange={(e) => {
-                    setShip_To_Zipcode(e.target.value);
-                  }}
                 />
               </FloatingLabel>
               <FloatingLabel

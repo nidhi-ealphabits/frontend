@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Row, Col, ButtonToolbar } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -70,7 +70,7 @@ function Success() {
               Get Label
             </Button>
           </ButtonToolbar>
-          {flag && <img src={label_url} height="470"></img>}
+          {flag && <img src={label_url} height="470" alt="Label"></img>}
         </Container>
       </Col>
     </Row>
